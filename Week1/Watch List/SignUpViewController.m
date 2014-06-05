@@ -16,6 +16,9 @@
 
 - (void)viewDidLoad
 {
+    // white status bar
+    [self setNeedsStatusBarAppearanceUpdate];
+    
     // set defualts
     usernameOK = false;
     PwdOK = false;
@@ -87,6 +90,10 @@
     
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+}
+
+-(UIStatusBarStyle)preferredStatusBarStyle{
+    return UIStatusBarStyleLightContent;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

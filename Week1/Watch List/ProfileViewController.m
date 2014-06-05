@@ -25,6 +25,9 @@
 
 - (void)viewDidLoad
 {
+    // white status bar
+    [self setNeedsStatusBarAppearanceUpdate];
+    
     BOOL hasFavMovie;
     
     if ([[[PFUser currentUser] objectForKey:@"hasFavMovie"] isEqualToString:@"true"]) {
@@ -43,6 +46,10 @@
     
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+}
+
+-(UIStatusBarStyle)preferredStatusBarStyle{
+    return UIStatusBarStyleLightContent;
 }
 
 - (void)didReceiveMemoryWarning
