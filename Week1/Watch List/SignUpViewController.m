@@ -29,7 +29,7 @@
     // validate username based on length
     [self.usernameField setTextValidationBlock:^BOOL(BZGFormField *field, NSString *text) {
         if (text.length < 6) {
-            field.alertView.title = @"Password is too short. Must be 6 characters or more";
+            field.alertView.title = @"Username is too short. Must be 6 characters or more";
             usernameOK = false;
             return NO;
         } else {
@@ -71,10 +71,9 @@
     
     self.emailField.textField.placeholder = @"Email";
     [self.emailField setTextValidationBlock:^BOOL(BZGFormField *field, NSString *text) {
-        // from https://github.com/benmcredmond/DHValidation/blob/master/DHValidation.m
-        NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-        NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
-        if (![emailTest evaluateWithObject:text]) {
+        NSString *emailReg = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+        NSPredicate *myEmailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailReg];
+        if (![myEmailTest evaluateWithObject:text]) {
             field.alertView.title = @"Invalid email address";
             emailOK = false;
             return NO;
@@ -110,7 +109,9 @@
 -(IBAction)onClick:(id)sender {
     UIButton *button = (UIButton *)sender;
     if (button.tag == 0) {
+        // check to see if all fields are valid
         if (usernameOK && PwdOK && conPwdOK && emailOK) {
+            // set users values and save to Parse
             PFUser *user = [PFUser user];
             user.username = [NSString stringWithFormat:@"%@", self.usernameField.textField.text];
             user.password = [NSString stringWithFormat:@"%@", self.pwdField.textField.text];
@@ -127,6 +128,11 @@
             [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if (!error) {
                     // Hooray! Let them use the app now.
+                    
+                    // go to login screen
+                    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                    SignUpViewController *loginView = [storyBoard instantiateViewControllerWithIdentifier:@"FirstView"];
+                    [self presentViewController:loginView animated:true completion:nil];
                 } else {
                     NSString *errorString = [error userInfo][@"error"];
                     // Show the errorString somewhere and let the user try again.
@@ -139,10 +145,8 @@
                 }
             }];
             
-            UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-            SignUpViewController *loginView = [storyBoard instantiateViewControllerWithIdentifier:@"FirstView"];
-            [self presentViewController:loginView animated:true completion:nil];
         } else {
+            // show error alert for invalid entries
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Entry"
                                                             message:@"Please make sure your entries are valid. Anything with a red and/or grey indicator light needs to be addressed."
                                                            delegate:nil
@@ -151,13 +155,16 @@
             [alert show];
         }
     } else if (button.tag == 1) {
+        // go to login screen when back button clicked
         UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         SignUpViewController *loginView = [storyBoard instantiateViewControllerWithIdentifier:@"FirstView"];
         [self presentViewController:loginView animated:true completion:nil];
     }
 }
 
+// detect when favorite movie switch value is changed
 -(IBAction)onSwitch:(id)sender {
+    // show/hide movieField based on switch
     if (movieSwitch.isOn == true) {
         [self.movieField setHidden:false];
     } else {
@@ -167,6 +174,7 @@
     }
 }
 
+// update hour label when slider value is changed
 -(IBAction)onSlide:(id)sender {
     hrLabel.text = [[NSNumber numberWithFloat:round(hrSlider.value)] stringValue];
 }

@@ -40,9 +40,11 @@
     return UIStatusBarStyleLightContent;
 }
 
+// called when login button or sign up button clicked
 -(IBAction)onClick:(id)sender {
     UIButton *button = (UIButton *)sender;
     if (button.tag == 0) {
+        // attempt to lo user in
         [PFUser logInWithUsernameInBackground:[NSString stringWithFormat:@"%@", self.loginUsernameField.textField.text] password:[NSString stringWithFormat:@"%@", self.loginPwdField.textField.text]
                                         block:^(PFUser *user, NSError *error) {
                                             if (user) {
@@ -52,7 +54,7 @@
                                                 ViewController *profileView = [storyBoard instantiateViewControllerWithIdentifier:@"ProfileView"];
                                                 [self presentViewController:profileView animated:true completion:nil];
                                             } else {
-                                                // The login failed. Check error to see why.
+                                                // The login failed and displayed error message
                                                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
                                                                                                 message:@"Please check your login credentials and try again."
                                                                                                delegate:nil
@@ -62,13 +64,13 @@
                                             }
                                         }];
     } else if (button.tag == 1) {
+        //
         UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         
         ViewController *signupView = [storyBoard instantiateViewControllerWithIdentifier:@"SignUpView"];
         [self presentViewController:signupView animated:true completion:nil];
     }
 }
-
 
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

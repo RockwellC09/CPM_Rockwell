@@ -30,6 +30,7 @@
     
     BOOL hasFavMovie;
     
+    // retrieve values from Parse and display them to users
     if ([[[PFUser currentUser] objectForKey:@"hasFavMovie"] isEqualToString:@"true"]) {
         hasFavMovie = true;
     } else {
@@ -58,6 +59,7 @@
     // Dispose of any resources that can be recreated.
 }
 
+// logout current users when logout button selected
 -(IBAction)onClick:(id)sender {
     [PFUser logOut];
     UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];

@@ -5,6 +5,12 @@
 //  Created by Christopher Rockwell on 6/4/14.
 //  Copyright (c) 2014 Christopher Rockwell. All rights reserved.
 //
+// Credit
+// BZGFormField
+// Copyright (c) 2013 Ben Guo
+// License https://github.com/benzguo/BZGFormField/blob/master/LICENSE
+// https://github.com/benzguo/BZGFormField
+//
 
 #import "AppDelegate.h"
 #import <Parse/Parse.h>
@@ -14,14 +20,14 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    
+    // set application id and ket to connect to Parse
     [Parse setApplicationId:@"roh7D1LeQ56iBto6N5KQMnkhKOaiy2mnZ8YlpQS8"
                   clientKey:@"QX4mWwY3D2uwGmpTxyQkj66uJnABUsbNfAM7dJCe"];
     
     PFUser *currentUser = [PFUser currentUser];
     
     if (currentUser != nil) {
-        // do stuff with the user
+        // show profile if user already signed in
         self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
         UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         
