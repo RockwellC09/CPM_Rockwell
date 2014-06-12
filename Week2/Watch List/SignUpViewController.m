@@ -122,7 +122,6 @@
                 if (!error) {
                     // Hooray! Let them use the app now.
                     PFObject *movInfo = [PFObject objectWithClassName:@"movInfo"];
-                    
                     movInfo[@"watchHrs"] = [NSNumber numberWithFloat:round(hrSlider.value)];
                     [movInfo saveInBackground];
                     

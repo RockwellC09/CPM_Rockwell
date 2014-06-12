@@ -11,7 +11,7 @@
 #import <Parse/Parse.h>
 
 
-@interface EditProfileViewController : UIViewController <BZGFormFieldDelegate>
+@interface EditProfileViewController : UIViewController <BZGFormFieldDelegate, UIAlertViewDelegate>
 {
     IBOutlet UISlider *hrSlider;
     IBOutlet UILabel *hrLabel;

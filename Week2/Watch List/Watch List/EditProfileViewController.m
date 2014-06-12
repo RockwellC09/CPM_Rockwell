@@ -111,7 +111,7 @@
                 [PFUser currentUser].password = self.nPwdField.textField.text;
                 [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                     if (!error) {
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Password Changed!"
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Password Updated!"
                                                                         message:@""
                                                                        delegate:nil
                                                               cancelButtonTitle:@"OK"
@@ -146,17 +146,37 @@
             [alert show];
         }
     } else if (button.tag == 1) {
-        PFObject *movInfo = [PFObject objectWithClassName:@"movInfo"];
         PFUser *cUser = [PFUser currentUser];
-        
-        movInfo[@"watchHrs"] = [NSNumber numberWithFloat:round(hrSlider.value)];
-        [movInfo saveInBackground];
+        // update profile
         cUser[@"favMovie"] = [NSString stringWithFormat:@"%@", self.movieField.textField.text];
         [cUser saveInBackground];
-        UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        PFQuery *query = [PFQuery queryWithClassName:@"movInfo"];
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if (!error) {
+                for (PFObject *object in objects) {
+                    PFObject *movInfo = [PFObject objectWithoutDataWithClassName:@"movInfo" objectId:[NSString stringWithFormat:@"%@", [object objectId]]];
+                    movInfo[@"watchHrs"] = [NSNumber numberWithFloat:round(hrSlider.value)];
+                    [movInfo saveInBackground];
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Profile Updated"
+                                                                    message: nil
+                                                                   delegate:self
+                                                          cancelButtonTitle:@"OK"
+                                                          otherButtonTitles:nil];
+                    [alert show];
+                }
+            } else {
+                NSString *errorString = [error userInfo][@"error"];
+                // show the errorString
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                                message:errorString
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                [alert show];
+            }
+            
+        }];
         
-        EditProfileViewController *profileView = [storyBoard instantiateViewControllerWithIdentifier:@"ProfileView"];
-        [self presentViewController:profileView animated:true completion:nil];
     } else {
         [self dismissViewControllerAnimated:true completion:nil];
     }
@@ -174,6 +194,13 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     return [textField resignFirstResponder];
+}
+
+-(void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    
+    EditProfileViewController *profileView = [storyBoard instantiateViewControllerWithIdentifier:@"ProfileView"];
+    [self presentViewController:profileView animated:true completion:nil];
 }
 
 /*
