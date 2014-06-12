@@ -8,6 +8,7 @@
 
 #import "BZGFormField.h"
 #import <Parse/Parse.h>
+#import "Reachability.h"
 
 @interface SignUpViewController : UIViewController <BZGFormFieldDelegate>
 {

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "BZGFormField.h"
 #import <Parse/Parse.h>
-
+#import "Reachability.h"
 
 @interface EditProfileViewController : UIViewController <BZGFormFieldDelegate, UIAlertViewDelegate>
 {

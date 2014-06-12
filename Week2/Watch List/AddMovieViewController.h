@@ -9,11 +9,12 @@
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 #import "BZGFormField.h"
+#import "Reachability.h"
 
 
 @interface AddMovieViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource, BZGFormFieldDelegate, UIAlertViewDelegate>
 {
-    NSArray *days;
+    NSArray *daysArray;
     IBOutlet UIDatePicker *timePicker;
     IBOutlet UIPickerView *dayPicker;
 }

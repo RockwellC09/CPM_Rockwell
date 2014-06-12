@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 #import "BZGFormField.h"
+#import "Reachability.h"
 
 @interface WatchListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 {

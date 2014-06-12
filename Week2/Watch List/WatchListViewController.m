@@ -9,7 +9,9 @@
 #import "WatchListViewController.h"
 int count;
 int count2;
-NSMutableArray *items;
+NSMutableArray *itemsArray;
+Reachability *myNetworkReachability;
+NetworkStatus myNetworkStatus;
 
 @interface WatchListViewController ()
 
@@ -28,13 +30,15 @@ NSMutableArray *items;
 
 - (void)viewDidLoad
 {
+    // get movies from parse and populate the table view
     PFQuery *query = [PFQuery queryWithClassName:@"itemInfo"];
     [query whereKey:@"user" equalTo:[PFUser currentUser]];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        items = [[NSMutableArray alloc] init];
+        itemsArray = [[NSMutableArray alloc] init];
         if (!error) {
             for (PFObject *object in objects) {
-                [items addObject:[object objectForKey:@"title"]];
+                // add title to items array
+                [itemsArray addObject:[object objectForKey:@"title"]];
                 count++;
             }
             [myTableView reloadData];
@@ -59,6 +63,7 @@ NSMutableArray *items;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    // defaults
     count = 0;
     count2 = 0;
 }
@@ -73,11 +78,13 @@ NSMutableArray *items;
     return UIStatusBarStyleLightContent;
 }
 
+// number of table view rows
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return count;
 }
 
+// populate table view
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *simpleTableIdentifier = @"SimpleTableCell";
@@ -89,23 +96,63 @@ NSMutableArray *items;
     }
     cell.textLabel.textColor = [UIColor darkGrayColor];
     
-    cell.textLabel.text = [NSString stringWithFormat:@"%@", [items objectAtIndex:count2]];
+    // set table view cell text to movie titles in items array
+    cell.textLabel.text = [NSString stringWithFormat:@"%@", [itemsArray objectAtIndex:count2]];
     count2++;
     
     return cell;
 }
 
+// handle table view selection
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    // check network connection
+    myNetworkReachability = [Reachability reachabilityWithHostName:@"www.google.com"];
+    myNetworkStatus = [myNetworkReachability currentReachabilityStatus];
+    if (myNetworkStatus == NotReachable) {
+        // no connection
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Network Connection"
+                                                        message:@"Please check your connection and try again."
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+    } else {
+        // has a valid connection
+     
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        NSString *userPassword = cell.textLabel.text;
+        [prefs setObject:userPassword forKey:@"title"];
+        
+        UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        
+        WatchListViewController *itemView = [storyBoard instantiateViewControllerWithIdentifier:@"ItemView"];
+        [self presentViewController:itemView animated:true completion:nil];
+    }
 }
 
 -(IBAction)onClick:(id)sender {
     UIButton *button = (UIButton *)sender;
     if (button.tag == 0) {
-        UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        
-        WatchListViewController *addMovieView = [storyBoard instantiateViewControllerWithIdentifier:@"AddMovieView"];
-        [self presentViewController:addMovieView animated:true completion:nil];
+        // check network connection
+        myNetworkReachability = [Reachability reachabilityWithHostName:@"www.google.com"];
+        myNetworkStatus = [myNetworkReachability currentReachabilityStatus];
+        if (myNetworkStatus == NotReachable) {
+            // no connection
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Network Connection"
+                                                            message:@"Please check your connection and try again."
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        } else {
+            // has a valid connection
+            
+            UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+            
+            WatchListViewController *addMovieView = [storyBoard instantiateViewControllerWithIdentifier:@"AddMovieView"];
+            [self presentViewController:addMovieView animated:true completion:nil];
+        }
     } else {
         UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         

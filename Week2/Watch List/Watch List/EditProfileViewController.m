@@ -7,6 +7,8 @@
 //
 
 #import "EditProfileViewController.h"
+Reachability *myNetworkReachability;
+NetworkStatus myNetworkStatus;
 
 @interface EditProfileViewController ()
 
@@ -29,6 +31,29 @@
     // white status bar
     [self setNeedsStatusBarAppearanceUpdate];
     
+    // retrieve values from Parse and populate slider
+    PFQuery *query = [PFQuery queryWithClassName:@"movInfo"];
+    [query whereKey:@"user" equalTo:[PFUser currentUser]];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            for (PFObject *object in objects) {
+                hrLabel.text = [NSString stringWithFormat:@"%@",[object objectForKey:@"watchHrs"]];
+                hrSlider.value = [[object objectForKey:@"watchHrs"] intValue];
+            }
+        } else {
+            NSString *errorString = [error userInfo][@"error"];
+            // show the errorString
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                            message:errorString
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        }
+        
+    }];
+    
+    // setup password fields
     self.oldPwdField.textField.placeholder = @"Current Password";
     // validate current
     self.oldPwdField.textField.secureTextEntry = YES;
@@ -65,29 +90,9 @@
     }];
     self.pwdConfirmField.delegate = self;
     
+    // setup movie field
     self.movieField.textField.placeholder = @"Favorite Movie/Show";
     self.movieField.delegate = self;
-    
-    // retrieve values from Parse and display them to users
-    PFQuery *query = [PFQuery queryWithClassName:@"movInfo"];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error) {
-            for (PFObject *object in objects) {
-                hrLabel.text = [NSString stringWithFormat:@"%@",[object objectForKey:@"watchHrs"]];
-                hrSlider.value = [[object objectForKey:@"watchHrs"] intValue];
-            }
-        } else {
-            NSString *errorString = [error userInfo][@"error"];
-            // show the errorString
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                            message:errorString
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];
-            [alert show];
-        }
-        
-    }];
     
     self.movieField.textField.text = [[PFUser currentUser] objectForKey:@"favMovie"];
     
@@ -104,79 +109,110 @@
 -(IBAction)onClick:(id)sender {
     UIButton *button = (UIButton *)sender;
     if (button.tag == 0) {
-        if (PwdOK) {
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-            NSString *pass = [NSString stringWithFormat:@"%@", [prefs valueForKeyPath:@"password"]];
-            if ([pass isEqualToString:[NSString stringWithFormat:@"%@", self.oldPwdField.textField.text]]) {
-                [PFUser currentUser].password = self.nPwdField.textField.text;
-                [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                    if (!error) {
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Password Updated!"
-                                                                        message:@""
-                                                                       delegate:nil
-                                                              cancelButtonTitle:@"OK"
-                                                              otherButtonTitles:nil];
-                        [alert show];
-                    } else {
-                        NSString *errorString = [error userInfo][@"error"];
-                        // Show the errorString somewhere and let the user try again.
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                                        message:errorString
-                                                                       delegate:nil
-                                                              cancelButtonTitle:@"OK"
-                                                              otherButtonTitles:nil];
-                        [alert show];
-                    }
-                }];
-            } else {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Wrong Password"
-                                                                message:@"Current password is incorrect"
-                                                               delegate:nil
-                                                      cancelButtonTitle:@"OK"
-                                                      otherButtonTitles:nil];
-                [alert show];
-            }
-        } else {
-            // show error alert for invalid entries
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Entry"
-                                                            message:@"Please make sure your entries are valid. Anything with a red and/or grey indicator light needs to be addressed."
+        // check network connection
+        myNetworkReachability = [Reachability reachabilityWithHostName:@"www.google.com"];
+        myNetworkStatus = [myNetworkReachability currentReachabilityStatus];
+        if (myNetworkStatus == NotReachable) {
+            // no connection
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Network Connection"
+                                                            message:@"Please check your connection and try again."
                                                            delegate:nil
                                                   cancelButtonTitle:@"OK"
                                                   otherButtonTitles:nil];
             [alert show];
-        }
-    } else if (button.tag == 1) {
-        PFUser *cUser = [PFUser currentUser];
-        // update profile
-        cUser[@"favMovie"] = [NSString stringWithFormat:@"%@", self.movieField.textField.text];
-        [cUser saveInBackground];
-        PFQuery *query = [PFQuery queryWithClassName:@"movInfo"];
-        [query whereKey:@"user" equalTo:[PFUser currentUser]];
-        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-            if (!error) {
-                for (PFObject *object in objects) {
-                    PFObject *movInfo = [PFObject objectWithoutDataWithClassName:@"movInfo" objectId:[NSString stringWithFormat:@"%@", [object objectId]]];
-                    movInfo[@"watchHrs"] = [NSNumber numberWithFloat:round(hrSlider.value)];
-                    [movInfo saveInBackground];
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Profile Updated"
-                                                                    message: nil
-                                                                   delegate:self
+        } else {
+            // has a valid connection
+            
+            if (PwdOK) {
+                NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+                NSString *pass = [NSString stringWithFormat:@"%@", [prefs valueForKeyPath:@"password"]];
+                // compare entered password with the users password
+                if ([pass isEqualToString:[NSString stringWithFormat:@"%@", self.oldPwdField.textField.text]]) {
+                    [PFUser currentUser].password = self.nPwdField.textField.text;
+                    [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                        if (!error) {
+                            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Password Updated!"
+                                                                            message:@""
+                                                                           delegate:nil
+                                                                  cancelButtonTitle:@"OK"
+                                                                  otherButtonTitles:nil];
+                            [alert show];
+                        } else {
+                            NSString *errorString = [error userInfo][@"error"];
+                            // Show the errorString somewhere and let the user try again.
+                            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                                            message:errorString
+                                                                           delegate:nil
+                                                                  cancelButtonTitle:@"OK"
+                                                                  otherButtonTitles:nil];
+                            [alert show];
+                        }
+                    }];
+                } else {
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Wrong Password"
+                                                                    message:@"Current password is incorrect"
+                                                                   delegate:nil
                                                           cancelButtonTitle:@"OK"
                                                           otherButtonTitles:nil];
                     [alert show];
                 }
             } else {
-                NSString *errorString = [error userInfo][@"error"];
-                // show the errorString
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                                message:errorString
+                // show error alert for invalid entries
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Invalid Entry"
+                                                                message:@"Please make sure your entries are valid. Anything with a red and/or grey indicator light needs to be addressed."
                                                                delegate:nil
                                                       cancelButtonTitle:@"OK"
                                                       otherButtonTitles:nil];
                 [alert show];
             }
+        }
+    } else if (button.tag == 1) {
+        // check network connection
+        myNetworkReachability = [Reachability reachabilityWithHostName:@"www.google.com"];
+        myNetworkStatus = [myNetworkReachability currentReachabilityStatus];
+        if (myNetworkStatus == NotReachable) {
+            // no connection
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Network Connection"
+                                                            message:@"Please check your connection and try again."
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        } else {
+            // has a valid connection
             
-        }];
+            PFUser *cUser = [PFUser currentUser];
+            // update profile
+            cUser[@"favMovie"] = [NSString stringWithFormat:@"%@", self.movieField.textField.text];
+            [cUser saveInBackground];
+            PFQuery *query = [PFQuery queryWithClassName:@"movInfo"];
+            [query whereKey:@"user" equalTo:[PFUser currentUser]];
+            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                if (!error) {
+                    for (PFObject *object in objects) {
+                        PFObject *movInfo = [PFObject objectWithoutDataWithClassName:@"movInfo" objectId:[NSString stringWithFormat:@"%@", [object objectId]]];
+                        movInfo[@"watchHrs"] = [NSNumber numberWithFloat:round(hrSlider.value)];
+                        [movInfo saveInBackground];
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Profile Updated"
+                                                                        message: nil
+                                                                       delegate:self
+                                                              cancelButtonTitle:@"OK"
+                                                              otherButtonTitles:nil];
+                        [alert show];
+                    }
+                } else {
+                    NSString *errorString = [error userInfo][@"error"];
+                    // show the errorString
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                                    message:errorString
+                                                                   delegate:nil
+                                                          cancelButtonTitle:@"OK"
+                                                          otherButtonTitles:nil];
+                    [alert show];
+                }
+                
+            }];
+        }
         
     } else {
         [self dismissViewControllerAnimated:true completion:nil];

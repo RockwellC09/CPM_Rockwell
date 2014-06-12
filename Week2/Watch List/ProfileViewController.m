@@ -7,6 +7,8 @@
 //
 
 #import "ProfileViewController.h"
+Reachability *myNetworkReachability;
+NetworkStatus myNetworkStatus;
 
 @interface ProfileViewController ()
 
@@ -25,6 +27,7 @@
 
 - (void)viewDidLoad
 {
+    
     // white status bar
     [self setNeedsStatusBarAppearanceUpdate];
     
@@ -32,6 +35,7 @@
     
     // retrieve values from Parse and display them to users
     PFQuery *query = [PFQuery queryWithClassName:@"movInfo"];
+    [query whereKey:@"user" equalTo:[PFUser currentUser]];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
             for (PFObject *object in objects) {
@@ -77,18 +81,49 @@
 -(IBAction)onClick:(id)sender {
     UIButton *button = (UIButton *)sender;
     if (button.tag == 0) {
-        UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        ProfileViewController *editView = [storyBoard instantiateViewControllerWithIdentifier:@"EditProfileView"];
-        [self presentViewController:editView animated:true completion:nil];
+        // check network connection
+        myNetworkReachability = [Reachability reachabilityWithHostName:@"www.google.com"];
+        myNetworkStatus = [myNetworkReachability currentReachabilityStatus];
+        if (myNetworkStatus == NotReachable) {
+            // no connection
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Network Connection"
+                                                            message:@"Please check your connection and try again."
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        } else {
+            // has a valid connection
+            
+            UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+            ProfileViewController *editView = [storyBoard instantiateViewControllerWithIdentifier:@"EditProfileView"];
+            [self presentViewController:editView animated:true completion:nil];
+        }
     } else if (button.tag == 1) {
+        // log user out
         [PFUser logOut];
         UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         ProfileViewController *loginView = [storyBoard instantiateViewControllerWithIdentifier:@"FirstView"];
         [self presentViewController:loginView animated:true completion:nil];
     } else {
-        UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        ProfileViewController *watchListView = [storyBoard instantiateViewControllerWithIdentifier:@"WatchListView"];
-        [self presentViewController:watchListView animated:true completion:nil];
+        // check network connection
+        myNetworkReachability = [Reachability reachabilityWithHostName:@"www.google.com"];
+        myNetworkStatus = [myNetworkReachability currentReachabilityStatus];
+        if (myNetworkStatus == NotReachable) {
+            // no connection
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Network Connection"
+                                                            message:@"Please check your connection and try again."
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        } else {
+            // has a valid connection
+            
+            UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+            ProfileViewController *watchListView = [storyBoard instantiateViewControllerWithIdentifier:@"WatchListView"];
+            [self presentViewController:watchListView animated:true completion:nil];
+        }
     }
 }
 

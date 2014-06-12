@@ -8,6 +8,8 @@
 
 #import "AddMovieViewController.h"
 int rowNum;
+Reachability *myNetworkReachability;
+NetworkStatus myNetworkStatus;
 
 @interface AddMovieViewController ()
 
@@ -30,8 +32,9 @@ int rowNum;
     // white status bar
     [self setNeedsStatusBarAppearanceUpdate];
     
-    days = [[NSArray alloc] initWithObjects:@"Sunday", @"Monday", @"Tuesday", @"Wednesday", @"Thursday", @"Friday", @"Saturday", @"Sunday", nil];
+    daysArray = [[NSArray alloc] initWithObjects:@"Sunday", @"Monday", @"Tuesday", @"Wednesday", @"Thursday", @"Friday", @"Saturday", @"Sunday", nil];
     
+    // setup title field
     self.itemTitle.textField.placeholder = @"Movie/Show Title";
     self.itemTitle.delegate = self;
     [super viewDidLoad];
@@ -58,22 +61,24 @@ int rowNum;
     return 1;
 }
 
-// returns the # of rows in each component..
+// returns the number of rows
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
     return 7;
 }
 
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view {
     
+    // setup picker view label
     UILabel *pickerLabel= [[UILabel alloc] initWithFrame:CGRectMake(30.0, 0.0, 150.0, 50.0)];
     [pickerLabel setBackgroundColor:[UIColor clearColor]];
     [pickerLabel setFont:[UIFont boldSystemFontOfSize:20.0]];
     pickerLabel.textAlignment = NSTextAlignmentCenter;
-    [pickerLabel setText:[NSString stringWithFormat:@"%@",[days objectAtIndex:row]]];
+    [pickerLabel setText:[NSString stringWithFormat:@"%@",[daysArray objectAtIndex:row]]];
     
     return pickerLabel;
 }
 
+// handle picker view selection
 - (void)pickerView:(UIPickerView *)thePickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
     rowNum = row;
 }
@@ -81,20 +86,36 @@ int rowNum;
 -(IBAction)onClick:(id)sender {
     UIButton *button = (UIButton *)sender;
     if (button.tag == 0) {
-        PFObject *itemInfo = [PFObject objectWithClassName:@"itemInfo"];
-        itemInfo[@"user"] = [PFUser currentUser];
-        itemInfo[@"title"] = self.itemTitle.textField.text;
-        NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
-        [outputFormatter setDateFormat:@"h:mm a"];
-        itemInfo[@"time"] = [outputFormatter stringFromDate:timePicker.date];;
-        itemInfo[@"day"] = [days objectAtIndex:rowNum];
-        [itemInfo saveInBackground];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Profile Updated"
-                                                        message: nil
-                                                       delegate:self
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        [alert show];
+        // check network connection
+        myNetworkReachability = [Reachability reachabilityWithHostName:@"www.google.com"];
+        myNetworkStatus = [myNetworkReachability currentReachabilityStatus];
+        if (myNetworkStatus == NotReachable) {
+            // no connection
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Network Connection"
+                                                            message:@"Please check your connection and try again."
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        } else {
+            // has a valid connection
+            
+            // save item to parse
+            PFObject *itemInfo = [PFObject objectWithClassName:@"itemInfo"];
+            itemInfo[@"user"] = [PFUser currentUser];
+            itemInfo[@"title"] = self.itemTitle.textField.text;
+            NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+            [outputFormatter setDateFormat:@"h:mm a"];
+            itemInfo[@"time"] = [outputFormatter stringFromDate:timePicker.date];;
+            itemInfo[@"day"] = [daysArray objectAtIndex:rowNum];
+            [itemInfo saveInBackground];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Item Saved"
+                                                            message: nil
+                                                           delegate:self
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        }
     } else {
         [self dismissViewControllerAnimated:true completion:nil];
     }

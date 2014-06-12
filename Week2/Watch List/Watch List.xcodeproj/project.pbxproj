@@ -42,6 +42,7 @@
 		17FDAF7D194A25C400FA58F4 /* WatchListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FDAF7C194A25C400FA58F4 /* WatchListViewController.m */; };
 		17FDAF80194A2F8100FA58F4 /* AddMovieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FDAF7F194A2F8100FA58F4 /* AddMovieViewController.m */; };
 		17FDAF83194A46A200FA58F4 /* ItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FDAF82194A46A200FA58F4 /* ItemViewController.m */; };
+		17FDAF87194A516E00FA58F4 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FDAF86194A516E00FA58F4 /* Reachability.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,6 +103,8 @@
 		17FDAF7F194A2F8100FA58F4 /* AddMovieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddMovieViewController.m; path = ../AddMovieViewController.m; sourceTree = "<group>"; };
 		17FDAF81194A46A200FA58F4 /* ItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ItemViewController.h; path = ../ItemViewController.h; sourceTree = "<group>"; };
 		17FDAF82194A46A200FA58F4 /* ItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ItemViewController.m; path = ../ItemViewController.m; sourceTree = "<group>"; };
+		17FDAF85194A516E00FA58F4 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		17FDAF86194A516E00FA58F4 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +144,7 @@
 		17C8D334193F9D520049414A = {
 			isa = PBXGroup;
 			children = (
+				17FDAF84194A515A00FA58F4 /* Reachability */,
 				17EF25D71946458E00D018F5 /* BZGFormField */,
 				17C8D346193F9D520049414A /* Watch List */,
 				17C8D365193F9D520049414A /* Watch ListTests */,
@@ -255,6 +259,15 @@
 			name = BZGFormField;
 			sourceTree = "<group>";
 		};
+		17FDAF84194A515A00FA58F4 /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				17FDAF85194A516E00FA58F4 /* Reachability.h */,
+				17FDAF86194A516E00FA58F4 /* Reachability.m */,
+			);
+			name = Reachability;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -359,6 +372,7 @@
 				17EF25DA194645A600D018F5 /* BZGFormField.m in Sources */,
 				17C8D357193F9D520049414A /* ViewController.m in Sources */,
 				17FDAF7A1948FD0E00FA58F4 /* EditProfileViewController.m in Sources */,
+				17FDAF87194A516E00FA58F4 /* Reachability.m in Sources */,
 				17FDAF80194A2F8100FA58F4 /* AddMovieViewController.m in Sources */,
 				17C8D351193F9D520049414A /* AppDelegate.m in Sources */,
 				171D1E851940096F006607CF /* SignUpViewController.m in Sources */,

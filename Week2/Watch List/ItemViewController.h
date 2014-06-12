@@ -7,11 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Parse/Parse.h>
+#import "Reachability.h"
 
 @interface ItemViewController : UIViewController
 {
     IBOutlet UILabel *titleLabel;
+    IBOutlet UILabel *showing;
 }
 
-@property (strong, nonatomic) NSString *title;
+-(IBAction)onClick:(id)sender;
 @end
