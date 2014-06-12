@@ -39,6 +39,9 @@
 		17FDAF761948157700FA58F4 /* Logout_Btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 17FDAF721948157700FA58F4 /* Logout_Btn.png */; };
 		17FDAF771948157700FA58F4 /* Signup_Btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 17FDAF731948157700FA58F4 /* Signup_Btn.png */; };
 		17FDAF7A1948FD0E00FA58F4 /* EditProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FDAF791948FD0E00FA58F4 /* EditProfileViewController.m */; };
+		17FDAF7D194A25C400FA58F4 /* WatchListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FDAF7C194A25C400FA58F4 /* WatchListViewController.m */; };
+		17FDAF80194A2F8100FA58F4 /* AddMovieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FDAF7F194A2F8100FA58F4 /* AddMovieViewController.m */; };
+		17FDAF83194A46A200FA58F4 /* ItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FDAF82194A46A200FA58F4 /* ItemViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,6 +96,12 @@
 		17FDAF731948157700FA58F4 /* Signup_Btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Signup_Btn.png; sourceTree = "<group>"; };
 		17FDAF781948FD0E00FA58F4 /* EditProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditProfileViewController.h; sourceTree = "<group>"; };
 		17FDAF791948FD0E00FA58F4 /* EditProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditProfileViewController.m; sourceTree = "<group>"; };
+		17FDAF7B194A25C400FA58F4 /* WatchListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WatchListViewController.h; path = ../WatchListViewController.h; sourceTree = "<group>"; };
+		17FDAF7C194A25C400FA58F4 /* WatchListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WatchListViewController.m; path = ../WatchListViewController.m; sourceTree = "<group>"; };
+		17FDAF7E194A2F8100FA58F4 /* AddMovieViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddMovieViewController.h; path = ../AddMovieViewController.h; sourceTree = "<group>"; };
+		17FDAF7F194A2F8100FA58F4 /* AddMovieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddMovieViewController.m; path = ../AddMovieViewController.m; sourceTree = "<group>"; };
+		17FDAF81194A46A200FA58F4 /* ItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ItemViewController.h; path = ../ItemViewController.h; sourceTree = "<group>"; };
+		17FDAF82194A46A200FA58F4 /* ItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ItemViewController.m; path = ../ItemViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -185,6 +194,12 @@
 				174DD3C31940DDDB00B43D16 /* ProfileViewController.m */,
 				17FDAF781948FD0E00FA58F4 /* EditProfileViewController.h */,
 				17FDAF791948FD0E00FA58F4 /* EditProfileViewController.m */,
+				17FDAF7B194A25C400FA58F4 /* WatchListViewController.h */,
+				17FDAF7C194A25C400FA58F4 /* WatchListViewController.m */,
+				17FDAF7E194A2F8100FA58F4 /* AddMovieViewController.h */,
+				17FDAF7F194A2F8100FA58F4 /* AddMovieViewController.m */,
+				17FDAF81194A46A200FA58F4 /* ItemViewController.h */,
+				17FDAF82194A46A200FA58F4 /* ItemViewController.m */,
 				17C8D358193F9D520049414A /* Images.xcassets */,
 				17C8D347193F9D520049414A /* Supporting Files */,
 			);
@@ -344,9 +359,12 @@
 				17EF25DA194645A600D018F5 /* BZGFormField.m in Sources */,
 				17C8D357193F9D520049414A /* ViewController.m in Sources */,
 				17FDAF7A1948FD0E00FA58F4 /* EditProfileViewController.m in Sources */,
+				17FDAF80194A2F8100FA58F4 /* AddMovieViewController.m in Sources */,
 				17C8D351193F9D520049414A /* AppDelegate.m in Sources */,
 				171D1E851940096F006607CF /* SignUpViewController.m in Sources */,
 				174DD3C41940DDDB00B43D16 /* ProfileViewController.m in Sources */,
+				17FDAF83194A46A200FA58F4 /* ItemViewController.m in Sources */,
+				17FDAF7D194A25C400FA58F4 /* WatchListViewController.m in Sources */,
 				17C8D34D193F9D520049414A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

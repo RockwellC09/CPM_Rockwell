@@ -151,6 +151,7 @@
         cUser[@"favMovie"] = [NSString stringWithFormat:@"%@", self.movieField.textField.text];
         [cUser saveInBackground];
         PFQuery *query = [PFQuery queryWithClassName:@"movInfo"];
+        [query whereKey:@"user" equalTo:[PFUser currentUser]];
         [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             if (!error) {
                 for (PFObject *object in objects) {

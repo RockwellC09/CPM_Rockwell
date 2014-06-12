@@ -80,11 +80,15 @@
         UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         ProfileViewController *editView = [storyBoard instantiateViewControllerWithIdentifier:@"EditProfileView"];
         [self presentViewController:editView animated:true completion:nil];
-    } else {
+    } else if (button.tag == 1) {
         [PFUser logOut];
         UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         ProfileViewController *loginView = [storyBoard instantiateViewControllerWithIdentifier:@"FirstView"];
         [self presentViewController:loginView animated:true completion:nil];
+    } else {
+        UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        ProfileViewController *watchListView = [storyBoard instantiateViewControllerWithIdentifier:@"WatchListView"];
+        [self presentViewController:watchListView animated:true completion:nil];
     }
 }
 
