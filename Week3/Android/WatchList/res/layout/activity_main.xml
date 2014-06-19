@@ -1,0 +1,68 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    tools:context="${packageName}.${activityClass}" >
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="42dp"
+        android:contentDescription="@string/logo_img"
+        android:scaleType="center"
+        android:src="@drawable/logo" />
+
+    <EditText
+        android:id="@+id/userlog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView1"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/apptheme_textfield_activated_holo_light"
+        android:ems="10"
+        android:hint="@string/username"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/pwdlog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/userlog"
+        android:layout_alignRight="@+id/userlog"
+        android:layout_below="@+id/userlog"
+        android:background="@drawable/apptheme_textfield_activated_holo_light"
+        android:ems="10"
+        android:hint="@string/password"
+        android:inputType="text|textPassword" />
+
+    <Button
+        android:id="@+id/login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/signup1"
+        android:layout_alignRight="@+id/pwdlog"
+        android:layout_below="@+id/pwdlog"
+        android:layout_marginTop="19dp"
+        android:background="@color/btn_color"
+        android:text="@string/login"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+    
+    <Button
+        android:id="@+id/signup1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/pwdlog"
+        android:layout_alignRight="@+id/pwdlog"
+        android:layout_below="@+id/login"
+        android:layout_marginTop="17dp"
+        android:background="@color/btn_color"
+        android:text="@string/signup"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+
+</RelativeLayout>
