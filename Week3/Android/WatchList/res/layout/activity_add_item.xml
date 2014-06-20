@@ -1,0 +1,54 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    tools:context="${packageName}.${activityClass}" >
+
+    <EditText
+        android:id="@+id/add_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="44dp"
+        android:background="@drawable/apptheme_textfield_activated_holo_light"
+        android:ems="10"
+        android:hint="@string/titleStr"
+        android:inputType="text" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/add_title"
+        android:layout_marginTop="132dp" >
+
+        <Spinner
+            android:id="@+id/daySpinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_weight="1"
+            android:entries="@array/days_array" />
+
+        <TimePicker
+            android:id="@+id/timePicker1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.33" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/add_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="86dp"
+        android:text="@string/showing"
+        android:textColor="@color/btn_color"
+        android:textSize="18sp" />
+
+</RelativeLayout>

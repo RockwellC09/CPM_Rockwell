@@ -33,6 +33,7 @@ public class WatchListActivity extends Activity {
 	TextView noItemsTV;
 	private boolean onResumeHasRun;
 	Intent viewItemActivity;
+	Intent addItemActivity;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +95,9 @@ public class WatchListActivity extends Activity {
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		// TODO Auto-generated method stub
+		
+		addItemActivity = new Intent(context, AddItemActivity.class);
+		startActivity(addItemActivity);
 		return super.onMenuItemSelected(featureId, item);
 	}
 	

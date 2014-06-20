@@ -45,6 +45,10 @@
             android:name="com.ChristopherRockwell.watchlist.ViewItemActivity"
             android:label="@string/title_activity_view_item" >
         </activity>
+        <activity
+            android:name="com.ChristopherRockwell.watchlist.AddItemActivity"
+            android:label="@string/title_activity_add_item" >
+        </activity>
     </application>
 
 </manifest>
