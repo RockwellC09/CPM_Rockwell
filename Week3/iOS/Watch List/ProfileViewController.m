@@ -33,34 +33,57 @@ NetworkStatus myNetworkStatus;
     
     __block int hoursWatched;
     
-    // retrieve values from Parse and display them to users
-    PFQuery *query = [PFQuery queryWithClassName:@"movInfo"];
-    [query whereKey:@"user" equalTo:[PFUser currentUser]];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error) {
-            for (PFObject *object in objects) {
-                hoursWatched = [[NSString stringWithFormat:@"%@",[object objectForKey:@"watchHrs"]] intValue];
-                hrsLabel.text = [NSString stringWithFormat:@"%i",hoursWatched];
-            }
-        } else {
-            NSString *errorString = [error userInfo][@"error"];
-            // show the errorString
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                            message:errorString
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];
-            [alert show];
-        }
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    if ([prefs valueForKey:@"username"] != nil) {
+        NSLog(@"get local data");
         
-    }];
-    userLabel.text = [[PFUser currentUser] objectForKey:@"username"];
-    emailLabel.text = [[PFUser currentUser] objectForKey:@"email"];
-    NSString *favStr = [NSString stringWithFormat:@"%@",[[[PFUser currentUser] objectForKey:@"favMovie"]stringByReplacingOccurrencesOfString:@" " withString:@""]];
-    if (![favStr isEqualToString:@""]) {
-        favLabel.text = [[PFUser currentUser] objectForKey:@"favMovie"];
+        userLabel.text = [prefs valueForKey:@"username"];
+        emailLabel.text = [prefs valueForKey:@"email"];
+        
+        NSString *favStr = [[NSString stringWithFormat:@"%@",[prefs valueForKey:@"fav"]] stringByReplacingOccurrencesOfString:@" " withString:@""];
+        
+        if (![favStr isEqualToString:@""]) {
+            favLabel.text = [prefs valueForKey:@"fav"];
+        } else {
+            favLabel.text = @"None";
+        }
+        hrsLabel.text = [prefs valueForKey:@"hours"];
     } else {
-        favLabel.text = @"None";
+        // retrieve values from Parse and display them to users
+        PFQuery *query = [PFQuery queryWithClassName:@"movInfo"];
+        [query whereKey:@"user" equalTo:[PFUser currentUser]];
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if (!error) {
+                for (PFObject *object in objects) {
+                    hoursWatched = [[NSString stringWithFormat:@"%@",[object objectForKey:@"watchHrs"]] intValue];
+                    hrsLabel.text = [NSString stringWithFormat:@"%i",hoursWatched];
+                    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+                    [prefs setObject:[NSString stringWithFormat:@"%i",hoursWatched] forKey:@"hours"];
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,
+                                                             (unsigned long)NULL), ^(void) {
+                        [self saveUserLocally];
+                    });
+                }
+            } else {
+                NSString *errorString = [error userInfo][@"error"];
+                // show the errorString
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                                message:errorString
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                [alert show];
+            }
+            
+        }];
+        userLabel.text = [[PFUser currentUser] objectForKey:@"username"];
+        emailLabel.text = [[PFUser currentUser] objectForKey:@"email"];
+        NSString *favStr = [NSString stringWithFormat:@"%@",[[[PFUser currentUser] objectForKey:@"favMovie"]stringByReplacingOccurrencesOfString:@" " withString:@""]];
+        if (![favStr isEqualToString:@""]) {
+            favLabel.text = [[PFUser currentUser] objectForKey:@"favMovie"];
+        } else {
+            favLabel.text = @"None";
+        }
     }
     
     [super viewDidLoad];
@@ -102,6 +125,14 @@ NetworkStatus myNetworkStatus;
     } else if (button.tag == 1) {
         // log user out
         [PFUser logOut];
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        [prefs setObject:nil forKey:@"username"];
+        [prefs setObject:nil forKey:@"email"];
+        [prefs setObject:nil forKey:@"fav"];
+        [prefs setObject:nil forKey:@"hours"];
+        [prefs setObject:nil forKey:@"title"];
+        [prefs setObject:nil forKey:@"day"];
+        [prefs setObject:nil forKey:@"time"];
         UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         ProfileViewController *loginView = [storyBoard instantiateViewControllerWithIdentifier:@"FirstView"];
         [self presentViewController:loginView animated:true completion:nil];
@@ -125,6 +156,48 @@ NetworkStatus myNetworkStatus;
             [self presentViewController:watchListView animated:true completion:nil];
         }
     }
+}
+
+// save user info locally
+- (void) saveUserLocally {
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    NSString *username = [NSString stringWithFormat:@"%@", userLabel.text];
+    NSString *email = [NSString stringWithFormat:@"%@", emailLabel.text];
+    NSString *fav = [NSString stringWithFormat:@"%@", favLabel.text];
+    [prefs setObject:username forKey:@"username"];
+    [prefs setObject:email forKey:@"email"];
+    [prefs setObject:fav forKey:@"fav"];
+    
+    // get movies from parse and populate the table view
+    PFQuery *query = [PFQuery queryWithClassName:@"itemInfo"];
+    [query whereKey:@"user" equalTo:[PFUser currentUser]];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        NSMutableArray *titlesArray = [[NSMutableArray alloc] init];
+        NSMutableArray *daysArray = [[NSMutableArray alloc] init];
+        NSMutableArray *timesArray = [[NSMutableArray alloc] init];
+        if (!error) {
+            for (PFObject *object in objects) {
+                // add title to items array
+                [titlesArray addObject:[object objectForKey:@"title"]];
+                [daysArray addObject:[object objectForKey:@"day"]];
+                [timesArray addObject:[object objectForKey:@"time"]];
+            }
+            [prefs setObject:titlesArray forKey:@"title"];
+            [prefs setObject:daysArray forKey:@"day"];
+            [prefs setObject:timesArray forKey:@"time"];
+            NSLog(@"Done Saving");
+        } else {
+            NSString *errorString = [error userInfo][@"error"];
+            // show the errorString
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                            message:errorString
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        }
+        
+    }];
 }
 
 /*

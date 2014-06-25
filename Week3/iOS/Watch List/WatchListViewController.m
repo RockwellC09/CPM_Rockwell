@@ -30,30 +30,38 @@ NetworkStatus myNetworkStatus;
 
 - (void)viewDidLoad
 {
-    // get movies from parse and populate the table view
-    PFQuery *query = [PFQuery queryWithClassName:@"itemInfo"];
-    [query whereKey:@"user" equalTo:[PFUser currentUser]];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        itemsArray = [[NSMutableArray alloc] init];
-        if (!error) {
-            for (PFObject *object in objects) {
-                // add title to items array
-                [itemsArray addObject:[object objectForKey:@"title"]];
-                count++;
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    if ([prefs valueForKey:@"username"] != nil) {
+        NSLog(@"get local data");
+        itemsArray = [[NSMutableArray alloc] initWithArray:[prefs valueForKey:@"title"] copyItems:true];
+        count = itemsArray.count;
+        [myTableView reloadData];
+    } else {
+        // get movies from parse and populate the table view
+        PFQuery *query = [PFQuery queryWithClassName:@"itemInfo"];
+        [query whereKey:@"user" equalTo:[PFUser currentUser]];
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            itemsArray = [[NSMutableArray alloc] init];
+            if (!error) {
+                for (PFObject *object in objects) {
+                    // add title to items array
+                    [itemsArray addObject:[object objectForKey:@"title"]];
+                    count++;
+                }
+                [myTableView reloadData];
+            } else {
+                NSString *errorString = [error userInfo][@"error"];
+                // show the errorString
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                                message:errorString
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                [alert show];
             }
-            [myTableView reloadData];
-        } else {
-            NSString *errorString = [error userInfo][@"error"];
-            // show the errorString
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                            message:errorString
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];
-            [alert show];
-        }
-        
-    }];
+            
+        }];
+    }
     
     // white status bar
     [self setNeedsStatusBarAppearanceUpdate];
@@ -121,8 +129,8 @@ NetworkStatus myNetworkStatus;
      
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-        NSString *userPassword = cell.textLabel.text;
-        [prefs setObject:userPassword forKey:@"title"];
+        NSString *movTitle = cell.textLabel.text;
+        [prefs setObject:movTitle forKey:@"movTitle"];
         
         UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         

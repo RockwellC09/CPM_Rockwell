@@ -41,28 +41,44 @@ NetworkStatus myNetworkStatus;
 - (void) viewWillAppear:(BOOL)animated {
     // retrieve movie/show information and display it to the user
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    [titleLabel setText:[prefs valueForKey:@"title"]];
-    PFQuery *query = [PFQuery queryWithClassName:@"itemInfo"];
-    [query whereKey:@"user" equalTo:[PFUser currentUser]];
-    [query whereKey:@"title" equalTo:titleLabel.text];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error) {
-            for (PFObject *object in objects) {
-                NSString *showingStr = [NSString stringWithFormat:@"Showing %@ at %@", [object objectForKey:@"day"], [object objectForKey:@"time"]];
-                [showing setText:showingStr];
-            }
-        } else {
-            NSString *errorString = [error userInfo][@"error"];
-            // show the errorString
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                            message:errorString
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];
-            [alert show];
-        }
+    [titleLabel setText:[prefs valueForKey:@"movTitle"]];
+    count = 0;
+    titlesArray = [[NSMutableArray alloc] initWithArray:[prefs valueForKey:@"title"] copyItems:true];
+    timesArray = [[NSMutableArray alloc] initWithArray:[prefs valueForKey:@"time"] copyItems:true];
+    daysArray = [[NSMutableArray alloc] initWithArray:[prefs valueForKey:@"day"] copyItems:true];
+    if ([prefs valueForKey:@"username"] != nil) {
+        NSLog(@"get local data");
         
-    }];
+        for (int i = 0; [[titlesArray objectAtIndex:i] isEqualToString:titleLabel.text]; i++) {
+            count++;
+        }
+        NSString *showingStr = [NSString stringWithFormat:@"Showing %@ at %@", [daysArray objectAtIndex:count], [timesArray objectAtIndex:count]];
+        [showing setText:showingStr];
+    }
+    
+//    else {
+//        PFQuery *query = [PFQuery queryWithClassName:@"itemInfo"];
+//        [query whereKey:@"user" equalTo:[PFUser currentUser]];
+//        [query whereKey:@"title" equalTo:titleLabel.text];
+//        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+//            if (!error) {
+//                for (PFObject *object in objects) {
+//                    NSString *showingStr = [NSString stringWithFormat:@"Showing %@ at %@", [object objectForKey:@"day"], [object objectForKey:@"time"]];
+//                    [showing setText:showingStr];
+//                }
+//            } else {
+//                NSString *errorString = [error userInfo][@"error"];
+//                // show the errorString
+//                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+//                                                                message:errorString
+//                                                               delegate:nil
+//                                                      cancelButtonTitle:@"OK"
+//                                                      otherButtonTitles:nil];
+//                [alert show];
+//            }
+//            
+//        }];
+//    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -100,6 +116,9 @@ NetworkStatus myNetworkStatus;
                     for (PFObject *object in objects) {
                         [object delete];
                     }
+                    [titlesArray removeObjectAtIndex:count];
+                    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+                    [prefs setValue:titlesArray forKey:@"title"];
                     UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
                     
                     ItemViewController *watchListView = [storyBoard instantiateViewControllerWithIdentifier:@"WatchListView"];

@@ -14,6 +14,10 @@
 {
     IBOutlet UILabel *titleLabel;
     IBOutlet UILabel *showing;
+    NSMutableArray *titlesArray;
+    NSMutableArray *timesArray;
+    NSMutableArray *daysArray;
+    int count;
 }
 
 -(IBAction)onClick:(id)sender;

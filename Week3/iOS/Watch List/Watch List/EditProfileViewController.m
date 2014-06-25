@@ -31,28 +31,6 @@ NetworkStatus myNetworkStatus;
     // white status bar
     [self setNeedsStatusBarAppearanceUpdate];
     
-    // retrieve values from Parse and populate slider
-    PFQuery *query = [PFQuery queryWithClassName:@"movInfo"];
-    [query whereKey:@"user" equalTo:[PFUser currentUser]];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error) {
-            for (PFObject *object in objects) {
-                hrLabel.text = [NSString stringWithFormat:@"%@",[object objectForKey:@"watchHrs"]];
-                hrSlider.value = [[object objectForKey:@"watchHrs"] intValue];
-            }
-        } else {
-            NSString *errorString = [error userInfo][@"error"];
-            // show the errorString
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                            message:errorString
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];
-            [alert show];
-        }
-        
-    }];
-    
     // setup password fields
     self.oldPwdField.textField.placeholder = @"Current Password";
     // validate current
@@ -95,6 +73,37 @@ NetworkStatus myNetworkStatus;
     self.movieField.delegate = self;
     
     self.movieField.textField.text = [[PFUser currentUser] objectForKey:@"favMovie"];
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    if ([prefs valueForKey:@"username"] != nil) {
+        NSLog(@"get local data");
+        
+        self.movieField.textField.text = [NSString stringWithFormat:@"%@", [prefs valueForKey:@"fav"]];
+        hrSlider.value = [[prefs valueForKey:@"hours"] intValue];
+        hrLabel.text = [prefs valueForKey:@"hours"];
+    } else {
+        // retrieve values from Parse and populate slider
+        PFQuery *query = [PFQuery queryWithClassName:@"movInfo"];
+        [query whereKey:@"user" equalTo:[PFUser currentUser]];
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if (!error) {
+                for (PFObject *object in objects) {
+                    hrLabel.text = [NSString stringWithFormat:@"%@",[object objectForKey:@"watchHrs"]];
+                    hrSlider.value = [[object objectForKey:@"watchHrs"] intValue];
+                }
+            } else {
+                NSString *errorString = [error userInfo][@"error"];
+                // show the errorString
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                                message:errorString
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                [alert show];
+            }
+            
+        }];
+    }
     
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -198,6 +207,10 @@ NetworkStatus myNetworkStatus;
                                                                        delegate:self
                                                               cancelButtonTitle:@"OK"
                                                               otherButtonTitles:nil];
+                        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+                        NSString *fav = [NSString stringWithFormat:@"%@", self.movieField.textField.text];
+                        [prefs setObject:fav forKey:@"fav"];
+                        [prefs setObject:[NSString stringWithFormat:@"%@",[NSNumber numberWithFloat:round(hrSlider.value)]] forKey:@"hours"];
                         [alert show];
                     }
                 } else {

@@ -19,4 +19,5 @@
 }
 
 -(IBAction)onClick:(id)sender;
+- (void) saveUserLocally;
 @end
