@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Watch List</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="logo_img">Logo</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="signup">Sign Up</string>
+    <string name="confirm_pwd">Confirm Password</string>
+    <string name="email">Email</string>
+    <string name="fav">Favorite Movie/Show?</string>
+    <string name="tv_amount">Amount of TV you watch per day? (Hrs)</string>
+    <string name="title_activity_signup">Watch List</string>
+    <string name="title_activity_profile">Profile</string>
+    <string name="fav2">Favorite Show/Movie</string>
+    <string name="hours">Hours of TV per day</string>
+    <string name="Edit">Edit Profile</string>
+    <string name="logout">Logout</string>
+    <string name="empty"></string>
+    <string name="title_activity_edit_profile">Edit Profile</string>
+    <string name="old_pwd">Current Password</string>
+    <string name="new_pwd">New Password</string>
+    <string name="update_pwd">Update Password</string>
+    <string name="title_activity_watch_list">Watch List</string>
+    <string name="add">Add</string>
+    <string name="no_item">No Items</string>
+    <string name="title_activity_view_item">Watch List</string>
+    <string name="delete">Delete</string>
+    <string name="title_activity_add_item">Add Item</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="titleStr">Movie/Show Title</string>
+    <string name="showing">Showing Day and Time</string>
+    <string name="profile">Profile</string>
+
+</resources>

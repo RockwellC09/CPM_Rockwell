@@ -1,0 +1,110 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    tools:context="${packageName}.${activityClass}" >
+
+    <EditText
+        android:id="@+id/ep_old_pwd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/apptheme_textfield_activated_holo_light"
+        android:ems="10"
+        android:hint="@string/old_pwd"
+        android:inputType="text|textPassword" />
+
+    <EditText
+        android:id="@+id/ep_new_pwd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ep_old_pwd"
+        android:layout_below="@+id/ep_old_pwd"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/apptheme_textfield_activated_holo_light"
+        android:ems="10"
+        android:hint="@string/new_pwd"
+        android:inputType="text|textPassword" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/ep_confirm_pwd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ep_new_pwd"
+        android:layout_below="@+id/ep_new_pwd"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/apptheme_textfield_activated_holo_light"
+        android:ems="10"
+        android:hint="@string/confirm_pwd"
+        android:inputType="text|textPassword" />
+
+    <Button
+        android:id="@+id/ep_update_pwd"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ep_confirm_pwd"
+        android:layout_centerHorizontal="true"
+        android:background="@color/btn_color"
+        android:text="@string/update_pwd"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ep_fav"
+        android:layout_centerVertical="true"
+        android:text="@string/fav"
+        android:textColor="@color/btn_color" />
+
+    <EditText
+        android:id="@+id/ep_fav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ep_confirm_pwd"
+        android:layout_below="@+id/textView1"
+        android:background="@drawable/apptheme_textfield_activated_holo_light"
+        android:ems="10"
+        android:inputType="text" />
+    
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ep_fav"
+        android:layout_below="@+id/ep_fav"
+        android:layout_marginTop="17dp"
+        android:text="@string/tv_amount"
+        android:textColor="@color/btn_color" />
+    
+    <Spinner
+        android:id="@+id/ep_hours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ep_fav"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="30dp"
+        android:entries="@array/hours_array"
+        android:gravity="center_horizontal" />
+
+    <Button
+        android:id="@+id/ep_edit_profile"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ep_update_pwd"
+        android:layout_below="@+id/ep_hours"
+        android:background="@color/btn_color"
+        android:text="@string/Edit"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+    
+</RelativeLayout>

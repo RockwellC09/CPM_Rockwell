@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/username"
+        android:layout_below="@+id/username"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/apptheme_textfield_activated_holo_light"
+        android:ems="10"
+        android:hint="@string/password"
+        android:inputType="text|textPassword" />
+
+    <EditText
+        android:id="@+id/confirmPwd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/password"
+        android:layout_below="@+id/password"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/apptheme_textfield_activated_holo_light"
+        android:ems="10"
+        android:hint="@string/confirm_pwd"
+        android:inputType="text|textPassword" />
+
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/confirmPwd"
+        android:layout_below="@+id/confirmPwd"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/apptheme_textfield_activated_holo_light"
+        android:ems="10"
+        android:hint="@string/email"
+        android:inputType="text|textEmailAddress" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/email"
+        android:layout_below="@+id/email"
+        android:layout_marginBottom="10dp"
+        android:text="@string/fav"
+        android:textColor="@color/btn_color" />
+
+    <EditText
+        android:id="@+id/fav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/apptheme_textfield_activated_holo_light"
+        android:ems="10"
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/fav"
+        android:layout_below="@+id/fav"
+        android:layout_marginTop="16dp"
+        android:text="@string/tv_amount"
+        android:textColor="@color/btn_color" />
+
+    <Spinner
+        android:id="@+id/hours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:entries="@array/hours_array"
+        android:gravity="center_horizontal" />
+
+    <Button
+        android:id="@+id/signup2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_alignRight="@+id/fav"
+        android:layout_below="@+id/hours"
+        android:layout_marginTop="15dp"
+        android:background="@color/btn_color"
+        android:text="@string/signup"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/fav"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/apptheme_textfield_activated_holo_light"
+        android:ems="10"
+        android:hint="@string/username"
+        android:inputType="text" />
+
+</RelativeLayout>

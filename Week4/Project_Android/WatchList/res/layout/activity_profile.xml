@@ -1,0 +1,122 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    tools:context="${packageName}.${activityClass}" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="42dp"
+        android:layout_marginTop="40dp"
+        android:text="@string/username"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/btn_color"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_below="@+id/textView1"
+        android:layout_marginBottom="50dp"
+        android:text="@string/email"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/btn_color"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/TextView02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/TextView01"
+        android:layout_below="@+id/TextView01"
+        android:layout_marginBottom="50dp"
+        android:text="@string/fav2"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/btn_color"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/TextView03"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/TextView02"
+        android:layout_below="@+id/TextView02"
+        android:text="@string/hours"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/btn_color"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/pro_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/TextView01"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_marginBottom="18dp"
+        android:text="@string/empty"
+        android:textColor="@color/btn_color" />
+
+    <TextView
+        android:id="@+id/pro_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/TextView02"
+        android:layout_alignLeft="@+id/TextView01"
+        android:layout_marginBottom="17dp"
+        android:text="@string/empty"
+        android:textColor="@color/btn_color" />
+
+    <Button
+        android:id="@+id/logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editProfile"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/editProfile"
+        android:layout_marginBottom="14dp"
+        android:background="@color/btn_color"
+        android:text="@string/logout"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/editProfile"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/logout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:background="@android:color/white"
+        android:text="@string/Edit"
+        android:textColor="@color/btn_color"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/pro_fav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/TextView03"
+        android:layout_alignLeft="@+id/TextView02"
+        android:layout_marginBottom="17dp"
+        android:text="@string/empty"
+        android:textColor="@color/btn_color" />
+
+    <TextView
+        android:id="@+id/pro_hours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/TextView03"
+        android:layout_below="@+id/TextView03"
+        android:layout_marginTop="15dp"
+        android:text="@string/empty"
+        android:textColor="@color/btn_color" />
+
+</RelativeLayout>
